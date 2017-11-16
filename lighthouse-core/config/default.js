@@ -39,6 +39,7 @@ module.exports = {
       'seo/meta-description',
       'seo/crawlable-links',
       'seo/meta-robots',
+      'fonts',
     ],
   },
   {
@@ -90,6 +91,7 @@ module.exports = {
     'content-width',
     'image-aspect-ratio',
     'deprecations',
+    'webfonts',
     'manual/pwa-cross-browser',
     'manual/pwa-page-transitions',
     'manual/pwa-each-page-has-url',
@@ -251,6 +253,7 @@ module.exports = {
         {id: 'critical-request-chains', weight: 0, group: 'perf-info'},
         {id: 'user-timings', weight: 0, group: 'perf-info'},
         {id: 'screenshot-thumbnails', weight: 0},
+        {id: 'webfonts', weight: 0, group: 'perf-info'},
       ],
     },
     'accessibility': {
