@@ -22,6 +22,7 @@ const args = require('yargs')
     'n': 'Number of runs per site',
     'reuse-chrome': 'Reuse the same Chrome instance across all site runs',
     'keep-first-run': 'If you use --reuse-chrome, by default the first run results are discarded',
+    'basic-auth': 'Add Basic Auth Headers to requests',
   })
   .default('n', 3)
   .group(
@@ -197,6 +198,7 @@ function analyzeWithLighthouse(launcher, url, outputPath, assetsPath, {ignoreRun
     disableCpuThrottling: ignoreRun ? true : args.disableCpuThrottling,
     disableNetworkThrottling: ignoreRun ? true : args.disableNetworkThrottling,
     disableDeviceEmulation: args.disableDeviceEmulation,
+    basicAuth: args.basicAuth,
     port: launcher.port,
   };
   return lighthouse(url, flags, config)
