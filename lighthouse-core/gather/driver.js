@@ -947,6 +947,24 @@ class Driver {
       .then(_ => this.sendCommand('Network.setCacheDisabled', {cacheDisabled: false}));
   }
 
+  /**
+   * @param {!String} credencial user:password
+   * @return {!Promise}
+   */
+  setBasicAuthHeader(credencial) {
+    let headers;
+    if(/.+:.+/.test(credencial)) {
+      const base64credencial = new Buffer(credencial).toString('base64')
+      headers = { Authorization: `Basic ${base64credencial}` }
+    } else {
+      if(credencial) log.warn('Driver', 'Invalid credencial');
+      headers = {};
+    }
+    return this.sendCommand('Network.setExtraHTTPHeaders', {
+      headers,
+    });
+  }
+
   clearDataForOrigin(url) {
     const origin = new URL(url).origin;
 

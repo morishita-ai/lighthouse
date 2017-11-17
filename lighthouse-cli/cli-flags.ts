@@ -14,7 +14,8 @@ import {GetValidOutputOptions, OutputMode} from './printer';
 export interface Flags {
   port: number, chromeFlags: string, output: any, outputPath: string, saveArtifacts: boolean,
       saveAssets: boolean, view: boolean, maxWaitForLoad: number, logLevel: string,
-      hostname: string, blockedUrlPatterns: string[], enableErrorReporting: boolean
+      hostname: string, blockedUrlPatterns: string[], enableErrorReporting: boolean,
+      basicAuth: string
 }
 
 export function getFlags(manualArgv?: string) {
@@ -42,6 +43,9 @@ export function getFlags(manualArgv?: string) {
       .example(
           'lighthouse <url> --quiet --chrome-flags="--headless"',
           'Launch Headless Chrome, turn off logging')
+      .example(
+          'lighthouse <url> --basic-auth "usernamme:password"',
+          'Add Basic Auth Headers to requests')
 
       // List of options
       .group(['verbose', 'quiet'], 'Logging:')
@@ -84,6 +88,7 @@ export function getFlags(manualArgv?: string) {
         'port': 'The port to use for the debugging protocol. Use 0 for a random port',
         'max-wait-for-load':
             'The timeout (in milliseconds) to wait before the page is considered done loading and the run should continue. WARNING: Very high values can lead to large traces and instability',
+        'basic-auth': 'Set basic auth headers to pass with request',
       })
 
       .group(['output', 'output-path', 'view'], 'Output:')

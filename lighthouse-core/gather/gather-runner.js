@@ -95,7 +95,7 @@ class GatherRunner {
    * @return {!Promise}
    */
   static setupDriver(driver, gathererResults, options) {
-    log.log('status', 'Initializingâ€¦');
+    log.log('status', 'Initializing…');
     const resetStorage = !options.flags.disableStorageReset;
     // Enable emulation based on flags
     return driver.assertNoSameOriginServiceWorkerClients(options.url)
@@ -195,7 +195,8 @@ class GatherRunner {
         // Set request blocking before any network activity
         // No "clearing" is done at the end of the pass since blockUrlPatterns([]) will unset all if
         // neccessary at the beginning of the next pass.
-        .then(() => options.driver.blockUrlPatterns(blockedUrls));
+        .then(() => options.driver.blockUrlPatterns(blockedUrls))
+        .then(() => options.driver.setBasicAuthHeader(options.flags.basicAuth || '{}'));
 
     return options.config.gatherers.reduce((chain, gatherer) => {
       return chain.then(_ => {
