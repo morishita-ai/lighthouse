@@ -17,12 +17,14 @@ const args = require('yargs')
   .example('node $0 -n 3 --sites-path ./sample-sites.json')
   .example('node $0 --site https://google.com/')
   .example('node $0 --subset')
+  .example('node $0 --chrome-flags="--headless --no-sandbox --disable-gpu"')
   .describe({
     'out': 'Custom out path',
     'n': 'Number of runs per site',
     'reuse-chrome': 'Reuse the same Chrome instance across all site runs',
     'keep-first-run': 'If you use --reuse-chrome, by default the first run results are discarded',
     'basic-auth': 'Add Basic Auth Headers to requests',
+    'chrome-flags': 'Custom flags to pass to Chrome (space-delimited). Use "--headless --no-sandbox --disable-gpu" in docker container. For a full list of flags, see http://peter.sh/experiments/chromium-command-line-switches/.'
   })
   .default('n', 3)
   .group(
@@ -89,7 +91,7 @@ function main() {
   console.log('Using out folder:', path.basename(outPath));
 
   if (args.reuseChrome) {
-    ChromeLauncher.launch().then(launcher => {
+    ChromeLauncher.launch({chromeFlags: args.chromeFlags.split(' ')}).then(launcher => {
       return runAnalysisWithExistingChromeInstances(launcher)
         .catch(handleError)
         .then(() => launcher.kill());
@@ -117,7 +119,7 @@ function runAnalysisWithNewChromeInstances() {
     const ignoreRun = keepFirstRun ? false : isFirstRun;
     for (const url of URLS) {
       promise = promise.then(() => {
-        return ChromeLauncher.launch().then(launcher => {
+        return ChromeLauncher.launch({chromeFlags: args.chromeFlags.split(' ')}).then(launcher => {
           return singleRunAnalysis(url, launcher, {ignoreRun})
             .catch(handleError)
             .then(() => launcher.kill());
