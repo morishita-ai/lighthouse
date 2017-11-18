@@ -23,6 +23,7 @@ const args = require('yargs')
     'n': 'Number of runs per site',
     'reuse-chrome': 'Reuse the same Chrome instance across all site runs',
     'keep-first-run': 'If you use --reuse-chrome, by default the first run results are discarded',
+    'config-path': 'The path to the config JSON.',
     'basic-auth': 'Add Basic Auth Headers to requests',
     'chrome-flags': 'Custom flags to pass to Chrome (space-delimited). Use "--headless --no-sandbox --disable-gpu" in docker container. For a full list of flags, see http://peter.sh/experiments/chromium-command-line-switches/.'
   })
@@ -47,7 +48,7 @@ const args = require('yargs')
 
 const constants = require('./constants.js');
 const utils = require('./utils.js');
-const config = require('../lighthouse-core/config/plots-config.js');
+let config = require('../lighthouse-core/config/plots-config.js');
 const lighthouse = require('../lighthouse-core/index.js');
 const ChromeLauncher = require('chrome-launcher');
 const Printer = require('../lighthouse-cli/printer');
@@ -97,6 +98,9 @@ function main() {
         .then(() => launcher.kill());
     });
     return;
+  }
+  if (args.configPath){
+    config = require(args.configPath);
   }
   runAnalysisWithNewChromeInstances();
 }
